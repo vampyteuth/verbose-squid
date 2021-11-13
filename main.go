@@ -14,12 +14,22 @@
 
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
 
-func init() {
-	fmt.Println("I run before main")
-}
+	"github.com/labstack/echo/v4"
+)
 
 func main() {
-	fmt.Println("Hello Terra!")
+	e := echo.New()
+
+	e.GET("/hello/:id", hello)
+
+	e.Logger.Fatal(e.Start(":9999"))
+}
+
+func hello(c echo.Context) error {
+	id := c.Param("id")
+	return c.String(http.StatusOK, fmt.Sprintf("%s is a total bad ass", id))
 }
